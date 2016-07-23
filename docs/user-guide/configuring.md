@@ -415,6 +415,12 @@ alert('foo'); // eslint-disable-line no-alert, quotes, semi
 alert('foo');
 ```
 
+All of the above methods also work for plugin rules. For example, to disable [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)'s `no-commonjs` rule, combine the plugin's name (`react`) and the rule's name (`no-commonjs`) into `react/no-commonjs`:
+
+```js
+require('fs'); // eslint-disable-line react/no-commonjs
+```
+
 **Note:** Comments that disable warnings for a portion of a file tell ESLint not to report rule violations for the disabled code. ESLint still parses the entire file, however, so disabled code still needs to be syntactically valid JavaScript.
 
 ## Adding Shared Settings
