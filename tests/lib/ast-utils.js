@@ -479,6 +479,83 @@ describe("ast-utils", function() {
             assert.strictEqual(astUtils.getStaticPropertyName(node), null);
         });
 
+        it("should return 'b' for `b: 1`", function() {
+            var ast = espree.parse("({b: 1})");
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return 'b' for `b() {}`", function() {
+            var ast = espree.parse("({b() {}})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return 'b' for `get b() {}`", function() {
+            var ast = espree.parse("({get b() {}})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return 'b' for `['b']: 1`", function() {
+            var ast = espree.parse("({['b']: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return 'b' for `['b']() {}`", function() {
+            var ast = espree.parse("({['b']() {}})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return 'b' for `[`b`]: 1`", function() {
+            var ast = espree.parse("({[`b`]: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "b");
+        });
+
+        it("should return '100' for` [100]: 1`", function() {
+            var ast = espree.parse("({[100]: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), "100");
+        });
+
+        it("should return null for `[b]: 1`", function() {
+            var ast = espree.parse("({[b]: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), null);
+        });
+
+        it("should return null for `['a' + 'b']: 1`", function() {
+            var ast = espree.parse("({['a' + 'b']: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), null);
+        });
+
+        it("should return null for `[tag`b`]: 1`", function() {
+            var ast = espree.parse("({[tag`b`]: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), null);
+        });
+
+        it("should return null for `[`${b}`]: 1`", function() {
+            var ast = espree.parse("({[`${b}`]: 1})", {ecmaVersion: 6});
+            var node = ast.body[0].expression.properties[0];
+
+            assert.strictEqual(astUtils.getStaticPropertyName(node), null);
+        });
+
         it("should return null for non member expressions", function() {
             var ast = espree.parse("foo()");
 
